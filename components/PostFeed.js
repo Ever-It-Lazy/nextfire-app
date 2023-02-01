@@ -7,7 +7,7 @@ export default function PostFeed({ user, posts }) {
 				<PostItem
 					post={post}
 					key={post.slug}
-					admin={admin}
+					// admin={admin}
 				/>
 			})
 			: null

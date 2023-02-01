@@ -20,9 +20,7 @@ export async function getServerSideProps(context) {
 			orderBy('createdAt', 'desc'),
 			limit(5)
 		);
-		posts = await getDocs(postsQuery)
-// TODO: no posts yet
-		posts =  [].map(postToJSON);
+		posts = (await getDocs(postsQuery)).docs.map(postToJSON);
 	}
 
 	return {
