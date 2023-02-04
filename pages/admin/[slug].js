@@ -1,6 +1,7 @@
 import styles from '@/styles/Admin.module.css';
 import AuthCheck from "@/components/AuthCheck";
 import { useForm } from "react-hook-form";
+import { ErrorMessage } from '@hookform/error-message';
 import Metatags from "@/components/Metatags";
 import { firestore, auth } from "@/lib/firebase";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
@@ -64,7 +65,7 @@ function PostManager() {
 }
 
 function PostForm({ defaultValues, postRef, preview }) {
-	const { register, handleSubmit, reset, watch } = useForm({ defaultValues, mode: 'onChange' });
+	const { register, handleSubmit, reset, watch, formState: { errors, isValid, isDirty } } = useForm({ defaultValues, mode: 'onChange', criteriaMode: 'all' });
 
 	const updatePost = async ({ content, published }) => {
 		await updateDoc(postRef, {
@@ -87,14 +88,28 @@ function PostForm({ defaultValues, postRef, preview }) {
 			)}
 
 			<div className={preview ? styles.hidden : styles.controls}>
-				<textarea name="content" {...register("content")} ></textarea>
+				<textarea {...register("content", {
+					maxLength: { value: 20000, message: "content is too long" },
+					minLength: { value: 10, message: "conent is too short" },
+					required: { value: true, message: "content is required" }
+				})} ></textarea>
+
+				<ErrorMessage errors={errors} name="content"
+
+					render={({ messages }) =>
+					messages &&
+						Object.entries(messages).map(([type, message]) => (
+							<p className='text-danger' key={type}>{message}</p>
+						))
+					}
+				/>
 
 				<fieldset>
 					<input className={styles.checkbox} name="published" type="checkbox" {...register("published")} />
 					<label>Published</label>
 				</fieldset>
 
-				<button type="submit" className='btn-green'>
+				<button type="submit" className='btn-green' disabled={!isDirty || !isValid}>
 					Save Changes
 				</button>
 			</div>
