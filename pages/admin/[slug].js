@@ -11,6 +11,7 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import ReactMarkdown from 'react-markdown';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
+import ImageUploader from '@/components/ImageUploader';
 
 export default function AdminPostEdit({ }) {
 	return (
@@ -88,6 +89,8 @@ function PostForm({ defaultValues, postRef, preview }) {
 			)}
 
 			<div className={preview ? styles.hidden : styles.controls}>
+				<ImageUploader />
+
 				<textarea {...register("content", {
 					maxLength: { value: 20000, message: "content is too long" },
 					minLength: { value: 10, message: "conent is too short" },
