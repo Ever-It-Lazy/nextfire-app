@@ -6,6 +6,8 @@ import PostContent from '@/components/PostContent';
 import AuthCheck from "@/components/AuthCheck";
 import HeartButton from '@/components/HeartButton';
 import Link from "next/link";
+import { useContext } from "react";
+import { UserContext } from "@/lib/context";
 
 export async function getStaticProps({ params }) {
 	const { username, slug } = params;
@@ -50,6 +52,8 @@ export default function Post(props) {
 
 	const post = realtimePost || props.post;
 
+	const { user: currentUser } = useContext(UserContext);
+
 	return (
 		<main className={styles.container}>
 			<section>
@@ -70,6 +74,12 @@ export default function Post(props) {
 				>
 					<HeartButton postRef={postRef} />
 				</AuthCheck>
+
+				{currentUser?.uid === post.uid && (
+				<Link href={`/admin/${post.slug}`}>
+					<button className="btn-blue">Edit Post</button>
+				</Link>
+				)}
 			</aside>
 		</main>
 	);
