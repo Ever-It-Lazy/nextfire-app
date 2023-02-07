@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { ErrorMessage } from '@hookform/error-message';
 import Metatags from "@/components/Metatags";
 import { firestore, auth } from "@/lib/firebase";
-import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { deleteDoc, doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -37,8 +37,6 @@ function PostManager() {
 	);
 	const [post] = useDocumentData(postRef);
 
-
-
 	return (
 		<main className={styles.container}>
 			{post && (
@@ -55,9 +53,10 @@ function PostManager() {
 						<button onClick={() => setPreview(!preview)}>
 							{preview ? 'Edit' : 'Preview'}
 						</button>
-						<Link href={`/${post.username}/${post.slug}`}>
-							<button className='btn-blue'>Live view</button>
-						</Link>
+						<button className='btn-blue' onClick={() => router.push(`/${post.username}/${post.slug}`)}>
+							Live view
+						</button>
+						<DeletePostButton postRef={postRef} />
 					</aside>
 				</>
 			)}
@@ -98,7 +97,6 @@ function PostForm({ defaultValues, postRef, preview }) {
 				})} ></textarea>
 
 				<ErrorMessage errors={errors} name="content"
-
 					render={({ messages }) =>
 					messages &&
 						Object.entries(messages).map(([type, message]) => (
@@ -117,5 +115,24 @@ function PostForm({ defaultValues, postRef, preview }) {
 				</button>
 			</div>
 		</form>
+	);
+}
+
+function DeletePostButton({ postRef }) {
+	const router = useRouter();
+
+	const deletePost = async () => {
+		const doIt = confirm('Are you sure?');
+		if (doIt) {
+			await deleteDoc(postRef);
+			router.push('/admin');
+			toast('post annihilated ', { icon: '🗑️' });
+		}
+	};
+
+	return (
+		<button className="btn-red" onClick={deletePost}>
+			Delete
+		</button>
 	);
 }
