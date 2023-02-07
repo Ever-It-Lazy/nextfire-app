@@ -176,6 +176,15 @@ button.btn-logo {
   border-radius: 8px;
 }
 
+.card a {
+	color: rgb(170, 170, 170);
+}
+
+.card a:hover {
+	color: black;
+	text-decoration: underline;
+}
+
 .card footer {
   display: flex;
 }
