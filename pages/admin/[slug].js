@@ -10,7 +10,6 @@ import { useState } from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import ReactMarkdown from 'react-markdown';
 import { toast } from 'react-hot-toast';
-import Link from 'next/link';
 import ImageUploader from '@/components/ImageUploader';
 
 export default function AdminPostEdit({ }) {
