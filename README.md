@@ -24,4 +24,4 @@ When in production, starts the app.
 
 ## Deploy
 
-CI/CD is controlled by the host site Vercel.  So commits to the master are automatically deployed.
+CI/CD is controlled by the host site Vercel.  So commits to the `main` branch are automatically deployed.
